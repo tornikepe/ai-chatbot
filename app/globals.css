@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* გლობალური სტილები */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Scrollbar სტილიზაცია — პატარა და ლამაზი */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #c4b5fd;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8b5cf6;
+}
+
+/* Markdown სტილები AI პასუხებში */
+.prose pre {
+  background: #1e1e2e;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+.prose code {
+  font-size: 0.85em;
+}
+.prose p {
+  margin: 0.25rem 0;
+}
+.prose ul, .prose ol {
+  margin: 0.5rem 0;
+}
+
+/* Typing ანიმაცია */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
