@@ -1,6 +1,14 @@
 import { createChatStream } from "../../../lib/ai";
 import { checkRateLimit } from "../../../lib/rateLimit";
 
+// Force Node.js runtime (not Edge) — the OpenAI SDK uses Node APIs.
+// Force dynamic rendering — this route uses request headers and must never be cached.
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+// On Vercel, streaming responses can exceed the default 10s function timeout.
+// vercel.json bumps this to 30s. If you need longer responses, also raise `max_tokens`.
+
 const SYSTEM_PROMPT =
   process.env.SYSTEM_PROMPT ||
   "You are a helpful customer support assistant. Be friendly, concise, and professional. Answer questions clearly and offer to help further.";

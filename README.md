@@ -1,6 +1,8 @@
 # AI Chatbot — Smart Customer Support
 
-A modern, AI-powered customer support chatbot that can be embedded on any website with a single line of code. Built with Next.js, OpenAI API, and Tailwind CSS.
+A modern, AI-powered customer support chatbot that can be embedded on any website with a single line of code. Built with Next.js, OpenAI (or free Groq) API, and Tailwind CSS.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftornikepe%2Fai-chatbot&env=AI_PROVIDER,GROQ_API_KEY,SYSTEM_PROMPT&envDescription=Choose%20your%20AI%20provider%20and%20add%20the%20matching%20API%20key.%20Groq%20is%20free!&envLink=https%3A%2F%2Fconsole.groq.com%2Fkeys)
 
 ## Features
 
@@ -28,11 +30,26 @@ npm install
 cp .env.example .env
 ```
 
-Edit `.env` and add your OpenAI API key:
+Choose one of three AI providers and edit `.env` accordingly:
+
+**Option A — Groq (FREE, recommended):** Sign up at [console.groq.com/keys](https://console.groq.com/keys) (no credit card).
 
 ```
-OPENAI_API_KEY=sk-your-api-key-here
-SYSTEM_PROMPT="You are a helpful assistant for [Your Business Name]."
+AI_PROVIDER=groq
+GROQ_API_KEY=gsk-your-key-here
+```
+
+**Option B — OpenAI (paid):** Requires billing at [platform.openai.com](https://platform.openai.com).
+
+```
+AI_PROVIDER=openai
+OPENAI_API_KEY=sk-your-key-here
+```
+
+**Option C — Demo mode (no API key):** Great for testing the UI.
+
+```
+AI_PROVIDER=demo
 ```
 
 ### 3. Run
@@ -111,10 +128,15 @@ model: "gpt-3.5-turbo" // Budget option
 
 ### Vercel (Recommended)
 
-1. Push to GitHub
-2. Import project on [vercel.com](https://vercel.com)
-3. Add `OPENAI_API_KEY` to environment variables
-4. Deploy
+1. Click the **Deploy with Vercel** button at the top of this README, or
+2. Push to GitHub, import on [vercel.com/new](https://vercel.com/new)
+3. Add environment variables in Vercel dashboard:
+   - `AI_PROVIDER` = `groq` (or `openai`)
+   - `GROQ_API_KEY` (or `OPENAI_API_KEY`)
+   - `SYSTEM_PROMPT` — your business's custom personality
+4. Deploy — you'll get a live URL like `https://ai-chatbot-xyz.vercel.app`
+
+The included `vercel.json` bumps the streaming API route timeout to 30 seconds so long AI responses don't get cut off.
 
 ## License
 
