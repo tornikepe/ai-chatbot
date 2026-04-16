@@ -9,17 +9,21 @@ import { useChat } from "../lib/useChat";
 /**
  * ChatWindow — the main chat container.
  *
- * Composes:
- *   - Header (bot info + action buttons)
- *   - Messages area (scrollable, auto-scrolls on new content)
- *   - Empty state (shown when no messages yet)
- *   - ChatInput (message input at the bottom)
- *
  * Props:
- *   darkMode: boolean       — current theme state
- *   onToggleDark: function  — called when the theme toggle is clicked
+ *   darkMode: boolean
+ *   onToggleDark: function
+ *   config: {
+ *     title: string           — bot name in header
+ *     subtitle: string        — optional tagline under the name
+ *     welcomeHeading: string  — empty-state heading
+ *     welcomeBody: string     — empty-state body text
+ *     prompts: string[]       — suggested prompt buttons
+ *   }
+ *
+ * All config values come from NEXT_PUBLIC_* env vars set per deployment.
+ * This means zero code changes between clients — only Vercel env vars differ.
  */
-export default function ChatWindow({ darkMode, onToggleDark }) {
+export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
   const {
     messages,
     isLoading,
@@ -31,46 +35,45 @@ export default function ChatWindow({ darkMode, onToggleDark }) {
 
   const messagesEndRef = useRef(null);
 
-  // Auto-scroll to the bottom on every new message or while streaming
+  const title = config.title || "AI Assistant";
+  const subtitle = config.subtitle || "";
+
+  // Auto-scroll to bottom on new messages or while streaming
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isThinking]);
 
   return (
     <div className="flex flex-col h-full bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-      {/* ── Header ───────────────────────────────────────────────── */}
+
+      {/* ── Header ─────────────────────────────────────────────── */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-violet-700/30 bg-gradient-to-r from-violet-600 via-violet-600 to-purple-700">
         <div className="flex items-center gap-3">
-          {/* Bot avatar */}
           <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
             <Bot size={20} className="text-white" />
           </div>
           <div>
             <h1 className="text-white font-semibold text-base leading-tight">
-              AI Assistant
+              {title}
             </h1>
             <div className="flex items-center gap-1.5 mt-0.5">
-              {/* Live status dot */}
               <span
                 className={`w-2 h-2 rounded-full ${
-                  isLoading
-                    ? "bg-yellow-300 animate-pulse"
-                    : "bg-green-400"
+                  isLoading ? "bg-yellow-300 animate-pulse" : "bg-green-400"
                 }`}
               />
               <p className="text-violet-200 text-xs">
-                {isLoading ? "Typing..." : "Online"}
+                {isLoading ? "Typing..." : subtitle || "Online"}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Action buttons */}
         <div className="flex items-center gap-1">
           <button
             onClick={onToggleDark}
             className="p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition-colors"
-            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            title={darkMode ? "Light mode" : "Dark mode"}
           >
             {darkMode ? <Sun size={17} /> : <Moon size={17} />}
           </button>
@@ -86,10 +89,10 @@ export default function ChatWindow({ darkMode, onToggleDark }) {
         </div>
       </div>
 
-      {/* ── Messages area ────────────────────────────────────────── */}
+      {/* ── Messages area ──────────────────────────────────────── */}
       <div className="flex-1 overflow-y-auto px-5 py-5">
         {messages.length === 0 ? (
-          <EmptyState onSend={sendMessage} />
+          <EmptyState onSend={sendMessage} config={config} />
         ) : (
           <>
             {messages.map((msg) => (
@@ -101,7 +104,7 @@ export default function ChatWindow({ darkMode, onToggleDark }) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* ── Input ────────────────────────────────────────────────── */}
+      {/* ── Input ──────────────────────────────────────────────── */}
       <ChatInput
         onSend={sendMessage}
         isLoading={isLoading}
@@ -111,44 +114,46 @@ export default function ChatWindow({ darkMode, onToggleDark }) {
   );
 }
 
-// ── Empty state component ─────────────────────────────────────────────
-/**
- * Shown when the chat has no messages yet.
- * Includes a hero section and suggested prompts to lower the barrier to entry.
- * Good empty states dramatically increase engagement.
- */
-function EmptyState({ onSend }) {
-  const suggestions = [
-    "What services do you offer?",
-    "How can I get started?",
-    "Tell me about pricing",
-    "Do you offer a free trial?",
-  ];
+// ── Empty state ─────────────────────────────────────────────────────
+const DEFAULT_PROMPTS = [
+  "What services do you offer?",
+  "How can I get started?",
+  "Tell me about pricing",
+  "Do you offer a free trial?",
+];
 
-  const features = [
-    { icon: Zap, label: "Instant replies" },
-    { icon: Shield, label: "Secure & private" },
-    { icon: Globe, label: "Available 24/7" },
-  ];
+const DEFAULT_FEATURES = [
+  { icon: Zap, label: "Instant replies" },
+  { icon: Shield, label: "Secure & private" },
+  { icon: Globe, label: "Available 24/7" },
+];
+
+function EmptyState({ onSend, config = {} }) {
+  const heading = config.welcomeHeading || "How can I help you today?";
+  const body =
+    config.welcomeBody ||
+    "I'm your AI-powered assistant. Ask me anything and I'll respond instantly.";
+  const prompts =
+    config.prompts && config.prompts.length > 0
+      ? config.prompts
+      : DEFAULT_PROMPTS;
 
   return (
     <div className="flex flex-col items-center justify-center h-full text-center px-4 animate-fade-in">
-      {/* Icon */}
       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mb-5 shadow-lg shadow-violet-200 dark:shadow-violet-900/30">
         <Bot size={30} className="text-white" />
       </div>
 
       <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
-        How can I help you today?
+        {heading}
       </h2>
       <p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs leading-relaxed">
-        I&apos;m your AI-powered assistant. Ask me anything and I&apos;ll
-        respond instantly.
+        {body}
       </p>
 
       {/* Feature pills */}
       <div className="flex items-center gap-4 mt-5 mb-6">
-        {features.map(({ icon: Icon, label }) => (
+        {DEFAULT_FEATURES.map(({ icon: Icon, label }) => (
           <div
             key={label}
             className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500"
@@ -161,7 +166,7 @@ function EmptyState({ onSend }) {
 
       {/* Suggested prompts */}
       <div className="flex flex-wrap gap-2 justify-center max-w-sm">
-        {suggestions.map((q) => (
+        {prompts.map((q) => (
           <button
             key={q}
             onClick={() => onSend(q)}
