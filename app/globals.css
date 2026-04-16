@@ -2,46 +2,100 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global resets */
+/* ── Global resets ──────────────────────────────────────────────── */
 html, body {
   height: 100%;
   margin: 0;
 }
 
-/* Thin, branded scrollbar */
+/* ── Branded scrollbar (WebKit browsers) ────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #c4b5fd;
-  border-radius: 3px;
+  border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #8b5cf6;
 }
 
-/* Markdown styling for AI responses */
+/* ── Message entrance animation ─────────────────────────────────── */
+/*
+ * Each new message slides up and fades in.
+ * This makes the chat feel alive and polished — a detail clients notice.
+ */
+.message-enter {
+  animation: fadeInUp 0.2s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Markdown styling for AI responses ──────────────────────────── */
+/*
+ * .prose is added by ReactMarkdown. These overrides ensure AI responses
+ * look clean and readable inside the chat bubble.
+ */
 .prose pre {
   background: #1e1e2e;
+  color: #cdd6f4;
   border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto;
-}
-.prose code {
-  font-size: 0.85em;
-}
-.prose p {
-  margin: 0.25rem 0;
-}
-.prose ul, .prose ol {
+  font-size: 0.82em;
   margin: 0.5rem 0;
 }
+.prose code:not(pre code) {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+  font-size: 0.85em;
+}
+.dark .prose code:not(pre code) {
+  background: rgba(167, 139, 250, 0.15);
+  color: #a78bfa;
+}
+.prose p {
+  margin: 0.3rem 0;
+}
+.prose ul,
+.prose ol {
+  margin: 0.4rem 0;
+  padding-left: 1.25rem;
+}
+.prose li {
+  margin: 0.15rem 0;
+}
+.prose strong {
+  font-weight: 600;
+}
+/* Headings inside AI responses */
+.prose h1, .prose h2, .prose h3 {
+  margin: 0.5rem 0 0.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
 
-/* Typing indicator animation */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+/* ── Error message bubble ────────────────────────────────────────── */
+.message-error {
+  border-left: 3px solid #ef4444;
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+}
+.dark .message-error {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #fca5a5 !important;
 }

@@ -1,23 +1,24 @@
 "use client";
 import { useState } from "react";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, AlertTriangle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 /**
  * MessageBubble — renders a single chat message.
  *
  * Props:
- *   message: { role: "user" | "assistant", content: string }
+ *   message: { id, role, content, timestamp, isError? }
  *
  * Layout:
- *   - user messages: right-aligned, purple background
- *   - assistant messages: left-aligned, gray background, with a Copy button
+ *   - User messages: right-aligned, violet background
+ *   - Assistant messages: left-aligned, gray background, with Copy button
+ *   - Error messages: left-aligned, red accent, warning icon
  *
- * Assistant messages are rendered as Markdown (bold, lists, code blocks, etc.)
- * because LLM responses commonly include Markdown formatting.
+ * All messages slide up with a fade-in animation on mount.
  */
 export default function MessageBubble({ message }) {
   const isUser = message.role === "user";
+  const isError = message.isError;
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -26,30 +27,52 @@ export default function MessageBubble({ message }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      /* Clipboard API may be unavailable in some browsers — silently fail */
+      /* Clipboard API may be unavailable in some environments */
     }
   };
 
+  // Format the timestamp as HH:MM — e.g. "14:32"
+  const formattedTime = message.timestamp
+    ? new Date(message.timestamp).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : null;
+
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4 group`}>
-      {/* Assistant avatar on the left */}
+    <div
+      className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4 group message-enter`}
+    >
+      {/* AI avatar */}
       {!isUser && (
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold mr-3 flex-shrink-0">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold mr-3 flex-shrink-0 mt-1">
           AI
         </div>
       )}
 
-      {/* Bubble + copy button wrapper */}
-      <div className="flex flex-col max-w-[75%]">
+      {/* Bubble + metadata */}
+      <div className={`flex flex-col ${isUser ? "items-end" : "items-start"} max-w-[78%]`}>
+        {/* The bubble itself */}
         <div
           className={`rounded-2xl px-4 py-3 ${
             isUser
-              ? "bg-violet-600 text-white rounded-br-md"
-              : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-md"
+              ? "bg-violet-600 text-white rounded-br-sm"
+              : isError
+              ? "message-error rounded-bl-sm"
+              : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-sm"
           }`}
         >
+          {isError && (
+            <div className="flex items-center gap-1.5 mb-1 text-red-600 dark:text-red-400">
+              <AlertTriangle size={14} />
+              <span className="text-xs font-medium">Error</span>
+            </div>
+          )}
+
           {isUser ? (
-            <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+              {message.content}
+            </p>
           ) : (
             <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none">
               <ReactMarkdown>{message.content}</ReactMarkdown>
@@ -57,30 +80,39 @@ export default function MessageBubble({ message }) {
           )}
         </div>
 
-        {/* Copy button — only on assistant messages, appears on hover */}
-        {!isUser && message.content && (
-          <button
-            onClick={handleCopy}
-            className="mt-1 self-start text-xs text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
-            title={copied ? "Copied!" : "Copy response"}
-          >
-            {copied ? (
-              <>
-                <Check size={12} /> Copied
-              </>
-            ) : (
-              <>
-                <Copy size={12} /> Copy
-              </>
-            )}
-          </button>
-        )}
+        {/* Timestamp + copy button row */}
+        <div className="flex items-center gap-3 mt-1 px-1">
+          {formattedTime && (
+            <span className="text-[11px] text-gray-400 dark:text-gray-500">
+              {formattedTime}
+            </span>
+          )}
+
+          {/* Copy button — only on non-error assistant messages, visible on hover */}
+          {!isUser && !isError && message.content && (
+            <button
+              onClick={handleCopy}
+              className="text-[11px] text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+              title={copied ? "Copied!" : "Copy response"}
+            >
+              {copied ? (
+                <>
+                  <Check size={11} /> Copied
+                </>
+              ) : (
+                <>
+                  <Copy size={11} /> Copy
+                </>
+              )}
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* User avatar on the right */}
+      {/* User avatar */}
       {isUser && (
-        <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-200 text-sm font-bold ml-3 flex-shrink-0">
-          U
+        <div className="w-8 h-8 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center text-violet-700 dark:text-violet-300 text-xs font-bold ml-3 flex-shrink-0 mt-1">
+          You
         </div>
       )}
     </div>

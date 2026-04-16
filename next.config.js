@@ -1,4 +1,36 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+
+/**
+ * Security headers applied to every response.
+ * These protect users from common web attacks (XSS, clickjacking, MIME sniffing).
+ * Enterprise clients often run security scanners — having these headers
+ * immediately separates a professional build from an amateur one.
+ */
+const securityHeaders = [
+  // Prevent browsers from guessing the content type (MIME sniffing)
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  // Block the app from being embedded in iframes on other sites (clickjacking)
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  // Enable the browser's built-in XSS filter
+  { key: "X-XSS-Protection", value: "1; mode=block" },
+  // Control how much referrer info is sent to external sites
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  // Disable access to sensitive hardware APIs we don't use
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+  // Speed up DNS resolution for linked resources
+  { key: "X-DNS-Prefetch-Control", value: "on" },
+];
+
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        // Apply security headers to all routes
+        source: "/(.*)",
+        headers: securityHeaders,
+      },
+    ];
+  },
+};
 
 module.exports = nextConfig;
