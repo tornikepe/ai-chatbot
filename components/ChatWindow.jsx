@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { MessageSquarePlus, Trash2, Moon, Sun } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
+import TypingIndicator from "./TypingIndicator";
 import { useChat } from "../lib/useChat";
 
 /**
@@ -18,13 +19,13 @@ import { useChat } from "../lib/useChat";
  *   onToggleDark: function  — called when the theme toggle is clicked
  */
 export default function ChatWindow({ darkMode, onToggleDark }) {
-  const { messages, isLoading, sendMessage, stopGenerating, clearMessages } = useChat();
+  const { messages, isLoading, isThinking, sendMessage, stopGenerating, clearMessages } = useChat();
   const messagesEndRef = useRef(null);
 
-  // Auto-scroll to the bottom whenever a new message arrives
+  // Auto-scroll to the bottom whenever a new message arrives or typing state changes
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isThinking]);
 
   return (
     <div className="flex flex-col h-full bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -91,7 +92,12 @@ export default function ChatWindow({ darkMode, onToggleDark }) {
             </div>
           </div>
         ) : (
-          messages.map((msg, i) => <MessageBubble key={i} message={msg} />)
+          <>
+            {messages.map((msg, i) => (
+              <MessageBubble key={i} message={msg} />
+            ))}
+            {isThinking && <TypingIndicator />}
+          </>
         )}
         <div ref={messagesEndRef} />
       </div>
