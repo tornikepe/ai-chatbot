@@ -1,8 +1,8 @@
 import OpenAI from "openai";
 
-// OpenAI კლიენტის "lazy" ინიციალიზაცია
-// ანუ კლიენტი მხოლოდ მაშინ იქმნება როცა პირველი request მოვა,
-// არა build-ის დროს. ეს აუცილებელია Vercel-ზე deploy-ისთვის.
+// Lazy initialization of the OpenAI client.
+// The client is only created on the first request — not during the build —
+// which is required for Vercel deployments where env vars are available at runtime only.
 let openai;
 function getClient() {
   if (!openai) {
@@ -11,17 +11,17 @@ function getClient() {
   return openai;
 }
 
-// სისტემის prompt — ეს ეუბნება AI-ს როგორ მოიქცეს
+// System prompt defines the AI's personality and behavior.
+// Customize this in .env to fit your business.
 const SYSTEM_PROMPT =
   process.env.SYSTEM_PROMPT ||
   "You are a helpful customer support assistant. Be friendly, concise, and professional. Answer questions clearly and offer to help further.";
 
 export async function POST(request) {
   try {
-    // მომხმარებლის შეტყობინებების წამოღება request body-დან
     const { messages } = await request.json();
 
-    // ვალიდაცია — messages უნდა იყოს მასივი
+    // Validate input: messages must be an array
     if (!messages || !Array.isArray(messages)) {
       return Response.json(
         { error: "Messages array is required" },
@@ -29,26 +29,27 @@ export async function POST(request) {
       );
     }
 
-    // OpenAI API-ს გამოძახება streaming რეჟიმში
-    // streaming ნიშნავს რომ პასუხი ნაწილ-ნაწილ მოდის, არა ერთიანად
+    // Call OpenAI with streaming enabled.
+    // Streaming means the response arrives token-by-token instead of all at once,
+    // giving a much better UX (user sees the AI "typing").
     const stream = await getClient().chat.completions.create({
-      model: "gpt-4o-mini", // იაფი და სწრაფი მოდელი, კლიენტებისთვის იდეალური
+      model: "gpt-4o-mini", // Fast and affordable — ideal for customer support
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages,
       ],
-      stream: true, // streaming ჩართვა
+      stream: true,
       max_tokens: 1000,
     });
 
-    // ReadableStream-ის შექმნა — ეს ნაწილ-ნაწილ აგზავნის პასუხს ბრაუზერში
+    // Convert the OpenAI stream into a browser-readable stream
+    // using the Server-Sent Events (SSE) format.
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
         for await (const chunk of stream) {
           const text = chunk.choices[0]?.delta?.content || "";
           if (text) {
-            // SSE (Server-Sent Events) ფორმატში გაგზავნა
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`));
           }
         }
@@ -67,7 +68,7 @@ export async function POST(request) {
   } catch (error) {
     console.error("Chat API error:", error);
 
-    // უფრო კონკრეტული error message-ები კლიენტისთვის
+    // Return specific error messages so the frontend can display helpful info
     let message = "Failed to generate response";
     if (error.code === "insufficient_quota") {
       message = "API quota exceeded. Please check your OpenAI billing.";

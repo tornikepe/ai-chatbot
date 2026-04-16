@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* გლობალური სტილები */
+/* Global resets */
 html, body {
   height: 100%;
   margin: 0;
 }
 
-/* Scrollbar სტილიზაცია — პატარა და ლამაზი */
+/* Thin, branded scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -23,7 +23,7 @@ html, body {
   background: #8b5cf6;
 }
 
-/* Markdown სტილები AI პასუხებში */
+/* Markdown styling for AI responses */
 .prose pre {
   background: #1e1e2e;
   border-radius: 0.5rem;
@@ -40,7 +40,7 @@ html, body {
   margin: 0.5rem 0;
 }
 
-/* Typing ანიმაცია */
+/* Typing indicator animation */
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }

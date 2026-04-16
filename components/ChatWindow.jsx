@@ -6,22 +6,22 @@ import ChatInput from "./ChatInput";
 import { useChat } from "../lib/useChat";
 
 /**
- * ChatWindow — მთავარი ჩატის კომპონენტი.
+ * ChatWindow — the main chat container.
  *
- * აერთიანებს:
- * - Header (სათაური + ღილაკები)
- * - Messages ზონა (auto-scroll ბოლოში)
- * - ChatInput (შეტყობინების გაგზავნა)
+ * Composes:
+ *   - Header (title + dark mode & clear buttons)
+ *   - Messages area (scrollable, auto-scrolls to bottom)
+ *   - ChatInput (message input box)
  *
  * Props:
- * - darkMode: boolean
- * - onToggleDark: function
+ *   darkMode: boolean       — current theme state
+ *   onToggleDark: function  — called when the theme toggle is clicked
  */
 export default function ChatWindow({ darkMode, onToggleDark }) {
   const { messages, isLoading, sendMessage, stopGenerating, clearMessages } = useChat();
   const messagesEndRef = useRef(null);
 
-  // ახალი შეტყობინების დროს ავტომატური scroll ქვემოთ
+  // Auto-scroll to the bottom whenever a new message arrives
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -59,9 +59,10 @@ export default function ChatWindow({ darkMode, onToggleDark }) {
         </div>
       </div>
 
-      {/* Messages */}
+      {/* Messages area */}
       <div className="flex-1 overflow-y-auto px-6 py-4">
         {messages.length === 0 ? (
+          // Empty state: welcome screen with suggested prompts
           <div className="flex flex-col items-center justify-center h-full text-center">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mb-4">
               <MessageSquarePlus size={28} className="text-white" />
@@ -72,7 +73,7 @@ export default function ChatWindow({ darkMode, onToggleDark }) {
             <p className="text-gray-500 dark:text-gray-400 text-sm max-w-sm">
               Ask me anything. I&apos;m here to assist you with any questions or concerns.
             </p>
-            {/* სწრაფი კითხვების ღილაკები */}
+            {/* Suggested prompt buttons — one-click starters */}
             <div className="flex flex-wrap gap-2 mt-6 justify-center">
               {[
                 "What services do you offer?",

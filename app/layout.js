@@ -1,13 +1,10 @@
 import "./globals.css";
 
 /**
- * Layout — Next.js App Router-ის მთავარი layout.
+ * Root layout — wraps every page in the app.
  *
- * ეს ფაილი ყველა გვერდს ერტყმის გარშემო.
- * აქ ვსვამთ:
- * - <html> და <body> ტეგებს
- * - ფონტებს
- * - მეტა-ინფორმაციას (SEO-სთვის)
+ * Next.js App Router requires a root layout that defines <html> and <body>.
+ * This is also where you set global metadata (SEO) and load fonts.
  */
 export const metadata = {
   title: "AI Chatbot — Smart Customer Support",

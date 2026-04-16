@@ -3,19 +3,19 @@ import { useState, useRef, useEffect } from "react";
 import { Send, Square } from "lucide-react";
 
 /**
- * ChatInput — შეტყობინების შეყვანის ველი.
+ * ChatInput — the message input box at the bottom of the chat.
  *
- * ფუნქციები:
- * - Enter-ზე დაჭერით გაგზავნა (Shift+Enter = ახალი ხაზი)
- * - auto-resize textarea (ტექსტის მიხედვით იზრდება)
- * - Loading დროს Stop ღილაკი ჩანს
- * - ცარიელ შეტყობინებას არ აგზავნის
+ * Features:
+ *   - Enter sends the message; Shift+Enter inserts a newline
+ *   - Textarea auto-resizes as the user types (up to 150px)
+ *   - Send button is disabled when the input is empty
+ *   - While a response is streaming, the Send button turns into a Stop button
  */
 export default function ChatInput({ onSend, isLoading, onStop }) {
   const [input, setInput] = useState("");
   const textareaRef = useRef(null);
 
-  // textarea-ს ავტომატური resize
+  // Auto-resize the textarea based on content
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -29,14 +29,14 @@ export default function ChatInput({ onSend, isLoading, onStop }) {
     if (!input.trim() || isLoading) return;
     onSend(input);
     setInput("");
-    // textarea-ს სიმაღლის რესეტი
+    // Reset textarea height after sending
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
   };
 
   const handleKeyDown = (e) => {
-    // Enter = გაგზავნა, Shift+Enter = ახალი ხაზი
+    // Enter = send, Shift+Enter = newline
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);

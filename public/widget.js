@@ -1,22 +1,28 @@
 /**
  * Embeddable Chat Widget
  *
- * კლიენტი თავის ვებსაიტზე ამ ერთ ხაზს ამატებს:
- * <script src="https://your-domain.com/widget.js" data-chatbot-id="client123"></script>
+ * Adds a floating chat bubble + iframe-based chat window to any website
+ * with a single line of code:
  *
- * და ჩატბოტი ავტომატურად გამოჩნდება მარჯვენა ქვედა კუთხეში!
+ *   <script src="https://your-domain.com/widget.js"
+ *           data-url="https://your-domain.com"></script>
  *
- * ეს არის ის რასაც Fiverr-ზე ყიდი — კლიენტი იხდის $300-800,
- * შენ ჩადგამ მის ვებსაიტზე, და მას customer support ბოტი ეშვება.
+ * Supported data-* attributes:
+ *   data-url       — the chatbot URL to load in the iframe (default: current origin)
+ *   data-position  — "right" or "left" (default: "right")
+ *   data-color     — bubble color, any CSS color (default: "#7c3aed")
+ *
+ * The script is a self-executing function (IIFE) so it doesn't leak
+ * variables into the host page.
  */
 (function () {
-  // კონფიგურაცია — data ატრიბუტებიდან წამოიღება
+  // Read config from the <script> tag's data-* attributes
   const script = document.currentScript;
   const chatbotUrl = script.getAttribute("data-url") || window.location.origin;
   const position = script.getAttribute("data-position") || "right";
   const primaryColor = script.getAttribute("data-color") || "#7c3aed";
 
-  // სტილების დამატება
+  // Inject widget styles into the host page
   const style = document.createElement("style");
   style.textContent = `
     #ai-chatbot-widget-bubble {
@@ -65,26 +71,25 @@
   `;
   document.head.appendChild(style);
 
-  // Chat ღილაკის შექმნა (bubble)
+  // Create the floating bubble button
   const bubble = document.createElement("button");
   bubble.id = "ai-chatbot-widget-bubble";
   bubble.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
   bubble.setAttribute("aria-label", "Open chat");
   document.body.appendChild(bubble);
 
-  // iframe-ის შექმნა (ჩატის ფანჯარა)
+  // Create the iframe that hosts the chatbot
   const frame = document.createElement("iframe");
   frame.id = "ai-chatbot-widget-frame";
   frame.src = chatbotUrl;
   frame.title = "AI Chat Assistant";
   document.body.appendChild(frame);
 
-  // ღილაკზე დაჭერით ჩატის გახსნა/დახურვა
+  // Toggle open/closed on bubble click and swap the icon
   let isOpen = false;
   bubble.addEventListener("click", function () {
     isOpen = !isOpen;
     frame.style.display = isOpen ? "block" : "none";
-    // ღილაკის იკონის შეცვლა
     bubble.innerHTML = isOpen
       ? `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`
       : `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
