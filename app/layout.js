@@ -16,11 +16,11 @@ export const metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "https://ai-chatbot.vercel.app"
   ),
   title: {
-    default: "AI Chat Assistant — 24/7 Customer Support for Your Business",
-    template: "%s — AI Chat Assistant",
+    default: "Georgian Bot — AI ასისტენტი ქართული ბიზნესისთვის",
+    template: "%s — Georgian Bot",
   },
   description:
-    "A production-grade AI assistant that answers customer questions 24/7, captures leads, and reduces support workload. Streaming responses, fully customizable, deploy in minutes.",
+    "AI ასისტენტი, რომელიც სრულყოფილად საუბრობს ქართულად და ინგლისურად. 24/7 პასუხობს თქვენს კლიენტებს, იღებს ჯავშნებს, იჭერს lead-ებს.",
   keywords: [
     "AI chatbot",
     "customer support automation",
@@ -61,8 +61,11 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <body className="font-sans antialiased bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 dark:from-[#0b0b12] dark:via-[#0c0a18] dark:to-[#120a20] text-gray-900 dark:text-gray-100 min-h-screen">
+    <html lang="en" className={`${inter.variable} dark`} suppressHydrationWarning>
+      <body className="font-sans antialiased bg-[#07070c] text-gray-100 min-h-screen selection:bg-violet-500/30 selection:text-white">
+        {/* Deep background with subtle noise + radial violet wash */}
+        <div className="fixed inset-0 -z-20 bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.18),transparent_55%),radial-gradient(ellipse_at_bottom_right,rgba(217,70,239,0.12),transparent_55%)]" />
+        <div className="fixed inset-0 -z-20 bg-[linear-gradient(180deg,#07070c_0%,#0a0a15_50%,#07070c_100%)]" />
         {children}
       </body>
     </html>

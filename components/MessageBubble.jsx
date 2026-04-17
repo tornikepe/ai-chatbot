@@ -59,11 +59,11 @@ export default function MessageBubble({ message }) {
               ? "bg-violet-600 text-white rounded-br-sm"
               : isError
               ? "message-error rounded-bl-sm"
-              : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-sm"
+              : "bg-white/[0.05] border border-white/5 text-gray-100 rounded-bl-sm"
           }`}
         >
           {isError && (
-            <div className="flex items-center gap-1.5 mb-1 text-red-600 dark:text-red-400">
+            <div className="flex items-center gap-1.5 mb-1 text-red-400">
               <AlertTriangle size={14} />
               <span className="text-xs font-medium">Error</span>
             </div>
@@ -83,7 +83,7 @@ export default function MessageBubble({ message }) {
         {/* Timestamp + copy button row */}
         <div className="flex items-center gap-3 mt-1 px-1">
           {formattedTime && (
-            <span className="text-[11px] text-gray-400 dark:text-gray-500">
+            <span className="text-[11px] text-gray-500">
               {formattedTime}
             </span>
           )}
@@ -92,7 +92,7 @@ export default function MessageBubble({ message }) {
           {!isUser && !isError && message.content && (
             <button
               onClick={handleCopy}
-              className="text-[11px] text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="text-[11px] text-gray-500 hover:text-violet-300 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
               title={copied ? "Copied!" : "Copy response"}
             >
               {copied ? (
@@ -111,7 +111,7 @@ export default function MessageBubble({ message }) {
 
       {/* User avatar */}
       {isUser && (
-        <div className="w-8 h-8 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center text-violet-700 dark:text-violet-300 text-xs font-bold ml-3 flex-shrink-0 mt-1">
+        <div className="w-8 h-8 rounded-full bg-violet-500/15 ring-1 ring-violet-500/25 flex items-center justify-center text-violet-300 text-xs font-bold ml-3 flex-shrink-0 mt-1">
           You
         </div>
       )}

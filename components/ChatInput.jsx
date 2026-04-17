@@ -52,7 +52,7 @@ export default function ChatInput({ onSend, isLoading, onStop }) {
   };
 
   return (
-    <div className="border-t border-gray-200/70 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm px-4 py-3">
+    <div className="border-t border-white/5 bg-[#0d0d18]/80 backdrop-blur-sm px-4 py-3">
       <form onSubmit={handleSubmit} className="flex items-end gap-2">
         <div className="flex-1 relative">
           <textarea
@@ -63,10 +63,10 @@ export default function ChatInput({ onSend, isLoading, onStop }) {
             placeholder="Type your message… (Enter to send)"
             rows={1}
             maxLength={MAX_LENGTH + 50} // allow slight overage so they see the counter turn red
-            className={`w-full resize-none rounded-xl border px-4 py-3 pr-4 text-sm bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
+            className={`w-full resize-none rounded-xl border px-4 py-3 pr-4 text-sm bg-white/[0.04] text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all ${
               isOverLimit
-                ? "border-red-400 dark:border-red-500 focus:ring-red-400"
-                : "border-gray-300 dark:border-gray-600 focus:ring-violet-500 focus:border-transparent"
+                ? "border-red-500/60 focus:ring-red-400"
+                : "border-white/10 focus:ring-violet-500/60 focus:border-transparent"
             }`}
           />
 
@@ -100,7 +100,7 @@ export default function ChatInput({ onSend, isLoading, onStop }) {
           <button
             type="submit"
             disabled={!input.trim() || isOverLimit}
-            className="flex-shrink-0 p-3 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 hover:shadow-glow disabled:bg-none disabled:bg-gray-200 dark:disabled:bg-gray-700 text-white disabled:text-gray-400 transition-all shadow-sm disabled:shadow-none hover:-translate-y-[1px] disabled:translate-y-0"
+            className="flex-shrink-0 p-3 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 hover:shadow-glow disabled:bg-none disabled:bg-white/5 text-white disabled:text-gray-500 transition-all shadow-sm disabled:shadow-none hover:-translate-y-[1px] disabled:translate-y-0"
             title="Send message"
           >
             <Send size={17} />
@@ -109,7 +109,7 @@ export default function ChatInput({ onSend, isLoading, onStop }) {
       </form>
 
       {/* Hint text */}
-      <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-1.5 ml-1">
+      <p className="text-[11px] text-gray-500 mt-1.5 ml-1">
         Shift+Enter for a new line
       </p>
     </div>

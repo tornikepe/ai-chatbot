@@ -44,9 +44,9 @@ export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
   }, [messages, isThinking]);
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="flex flex-col h-full bg-[#0d0d18]/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 ring-1 ring-black/40 overflow-hidden">
       {/* ── Header ─────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-violet-700/30 bg-gradient-to-r from-violet-600 via-violet-600 to-purple-700">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-gradient-to-r from-violet-700 via-violet-700 to-fuchsia-700">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
             <Bot size={20} className="text-white" />
@@ -143,10 +143,10 @@ function EmptyState({ onSend, config = {} }) {
         <Bot size={30} className="text-white" />
       </div>
 
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
+      <h2 className="text-xl font-semibold text-gray-100 mb-2">
         {heading}
       </h2>
-      <p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs leading-relaxed">
+      <p className="text-gray-400 text-sm max-w-xs leading-relaxed">
         {body}
       </p>
 
@@ -155,7 +155,7 @@ function EmptyState({ onSend, config = {} }) {
         {DEFAULT_FEATURES.map(({ icon: Icon, label }) => (
           <div
             key={label}
-            className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500"
+            className="flex items-center gap-1.5 text-xs text-gray-500"
           >
             <Icon size={13} className="text-violet-400" />
             {label}
@@ -169,7 +169,7 @@ function EmptyState({ onSend, config = {} }) {
           <button
             key={q}
             onClick={() => onSend(q)}
-            className="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-gray-800 hover:border-violet-300 dark:hover:border-violet-700 hover:text-violet-700 dark:hover:text-violet-300 transition-all"
+            className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] text-sm text-gray-300 hover:bg-violet-500/10 hover:border-violet-500/50 hover:text-violet-200 transition-all"
           >
             {q}
           </button>
