@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { Send, Square } from "lucide-react";
+import { ArrowUp, Square } from "lucide-react";
 
 // Hard limit matches the server-side MAX_MESSAGE_LENGTH in route.js
 const MAX_LENGTH = 4000;
@@ -10,20 +10,17 @@ const COUNTER_THRESHOLD = 500;
 /**
  * ChatInput — the message composer at the bottom of the chat.
  *
- * Features:
- *   - Enter sends; Shift+Enter inserts a newline
- *   - Auto-resizing textarea (max ~150px tall)
- *   - Character counter appears when user is near the limit
- *   - Send button disabled when empty or over the limit
- *   - Stop button replaces Send while the AI is generating
+ * Single rounded-pill input with the send button tucked inside (ChatGPT-style).
+ * No hint paragraph below — the placeholder + intuitive arrow icon are enough.
  */
-export default function ChatInput({ onSend, isLoading, onStop, placeholder, hint }) {
+export default function ChatInput({ onSend, isLoading, onStop, placeholder }) {
   const [input, setInput] = useState("");
   const textareaRef = useRef(null);
 
   const remaining = MAX_LENGTH - input.length;
   const isOverLimit = remaining < 0;
   const showCounter = remaining <= COUNTER_THRESHOLD;
+  const canSend = input.trim() && !isOverLimit && !isLoading;
 
   // Auto-resize the textarea to fit its content (capped at 150px)
   useEffect(() => {
@@ -36,7 +33,7 @@ export default function ChatInput({ onSend, isLoading, onStop, placeholder, hint
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!input.trim() || isLoading || isOverLimit) return;
+    if (!canSend) return;
     onSend(input.trim());
     setInput("");
     if (textareaRef.current) {
@@ -53,65 +50,66 @@ export default function ChatInput({ onSend, isLoading, onStop, placeholder, hint
 
   return (
     <div className="border-t border-white/5 bg-[#0d0d18]/80 backdrop-blur-sm px-4 py-3">
-      <form onSubmit={handleSubmit} className="flex items-end gap-2">
-        <div className="flex-1 relative">
-          <textarea
-            ref={textareaRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={placeholder || "Type your message… (Enter to send)"}
-            rows={1}
-            maxLength={MAX_LENGTH + 50} // allow slight overage so they see the counter turn red
-            className={`w-full resize-none rounded-xl border px-4 py-3 pr-4 text-sm bg-white/[0.04] text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all ${
-              isOverLimit
-                ? "border-red-500/60 focus:ring-red-400"
-                : "border-white/10 focus:ring-violet-500/60 focus:border-transparent"
-            }`}
-          />
+      <form onSubmit={handleSubmit} className="relative">
+        <textarea
+          ref={textareaRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder || "Message…"}
+          rows={1}
+          maxLength={MAX_LENGTH + 50}
+          className={`w-full resize-none rounded-2xl border bg-white/[0.05] pl-4 pr-14 py-3.5 text-sm text-gray-100 placeholder-gray-500 focus:outline-none transition-all ${
+            isOverLimit
+              ? "border-red-500/60 focus:border-red-500/80"
+              : "border-white/10 focus:border-violet-500/50 focus:bg-white/[0.07]"
+          }`}
+        />
 
-          {/* Character counter — only shown when user is near/over the limit */}
-          {showCounter && (
-            <span
-              className={`absolute bottom-2.5 right-3 text-[11px] pointer-events-none ${
-                isOverLimit
-                  ? "text-red-500 font-medium"
-                  : remaining <= 100
-                  ? "text-orange-400"
-                  : "text-gray-400"
-              }`}
+        {/* Send / Stop button — tucked inside the input on the right */}
+        <div className="absolute bottom-2 right-2">
+          {isLoading ? (
+            <button
+              type="button"
+              onClick={onStop}
+              className="w-9 h-9 flex items-center justify-center rounded-xl bg-red-500 hover:bg-red-600 text-white transition-colors shadow-sm"
+              title="Stop"
+              aria-label="Stop generating"
             >
-              {remaining}
-            </span>
+              <Square size={14} fill="currentColor" />
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={!canSend}
+              className={`w-9 h-9 flex items-center justify-center rounded-xl text-white transition-all ${
+                canSend
+                  ? "bg-gradient-to-br from-violet-600 to-fuchsia-600 hover:shadow-glow hover:scale-105"
+                  : "bg-white/10 text-gray-600 cursor-not-allowed"
+              }`}
+              title="Send"
+              aria-label="Send message"
+            >
+              <ArrowUp size={16} strokeWidth={2.5} />
+            </button>
           )}
         </div>
 
-        {/* Stop or Send button */}
-        {isLoading ? (
-          <button
-            type="button"
-            onClick={onStop}
-            className="flex-shrink-0 p-3 rounded-xl bg-red-500 hover:bg-red-600 text-white transition-colors shadow-sm"
-            title="Stop generating"
+        {/* Character counter — floats above the input, only when near the limit */}
+        {showCounter && (
+          <span
+            className={`absolute -top-5 right-2 text-[11px] tabular-nums pointer-events-none ${
+              isOverLimit
+                ? "text-red-500 font-medium"
+                : remaining <= 100
+                ? "text-orange-400"
+                : "text-gray-500"
+            }`}
           >
-            <Square size={17} />
-          </button>
-        ) : (
-          <button
-            type="submit"
-            disabled={!input.trim() || isOverLimit}
-            className="flex-shrink-0 p-3 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 hover:shadow-glow disabled:bg-none disabled:bg-white/5 text-white disabled:text-gray-500 transition-all shadow-sm disabled:shadow-none hover:-translate-y-[1px] disabled:translate-y-0"
-            title="Send message"
-          >
-            <Send size={17} />
-          </button>
+            {remaining}
+          </span>
         )}
       </form>
-
-      {/* Hint text */}
-      <p className="text-[11px] text-gray-500 mt-1.5 ml-1">
-        {hint || "Shift+Enter for a new line"}
-      </p>
     </div>
   );
 }
