@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { Bot, Trash2, Moon, Sun, Zap, Shield, Globe } from "lucide-react";
+import { Bot, Trash2, Zap, Shield, Globe } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
 import TypingIndicator from "./TypingIndicator";
@@ -10,20 +10,13 @@ import { useChat } from "../lib/useChat";
  * ChatWindow — the main chat container.
  *
  * Props:
- *   darkMode: boolean
- *   onToggleDark: function
  *   config: {
- *     title: string           — bot name in header
- *     subtitle: string        — optional tagline under the name
- *     welcomeHeading: string  — empty-state heading
- *     welcomeBody: string     — empty-state body text
- *     prompts: string[]       — suggested prompt buttons
+ *     title, subtitle, welcomeHeading, welcomeBody, prompts
  *   }
  *
  * All config values come from NEXT_PUBLIC_* env vars set per deployment.
- * This means zero code changes between clients — only Vercel env vars differ.
  */
-export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
+export default function ChatWindow({ config = {} }) {
   const {
     messages,
     isLoading,
@@ -33,14 +26,17 @@ export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
     clearMessages,
   } = useChat();
 
-  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   const title = config.title || "Tornikes AI BOT";
   const subtitle = config.subtitle || "";
 
-  // Auto-scroll to bottom on new messages or while streaming
+  // Auto-scroll the MESSAGES container only — never the page.
+  // Using scrollIntoView() would scroll all ancestors, including the page,
+  // so we manipulate the container's scrollTop directly.
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const c = messagesContainerRef.current;
+    if (c) c.scrollTop = c.scrollHeight;
   }, [messages, isThinking]);
 
   return (
@@ -69,13 +65,6 @@ export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
         </div>
 
         <div className="flex items-center gap-1">
-          <button
-            onClick={onToggleDark}
-            className="p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition-colors"
-            title={darkMode ? "Light mode" : "Dark mode"}
-          >
-            {darkMode ? <Sun size={17} /> : <Moon size={17} />}
-          </button>
           {messages.length > 0 && (
             <button
               onClick={clearMessages}
@@ -89,7 +78,7 @@ export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
       </div>
 
       {/* ── Messages area ──────────────────────────────────────── */}
-      <div className="flex-1 overflow-y-auto px-5 py-5">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-5 py-5">
         {messages.length === 0 ? (
           <EmptyState onSend={sendMessage} config={config} />
         ) : (
@@ -100,7 +89,6 @@ export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
             {isThinking && <TypingIndicator />}
           </>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* ── Input ──────────────────────────────────────────────── */}
@@ -108,6 +96,8 @@ export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
         onSend={sendMessage}
         isLoading={isLoading}
         onStop={stopGenerating}
+        placeholder={config.inputPlaceholder}
+        hint={config.inputHint}
       />
     </div>
   );

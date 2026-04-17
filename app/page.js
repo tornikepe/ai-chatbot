@@ -11,8 +11,6 @@ import {
   Check,
   ArrowRight,
   Star,
-  Moon,
-  Sun,
   Mail,
   Phone,
   Send,
@@ -145,7 +143,7 @@ const T = {
       plans: [
         {
           name: "Starter",
-          price: "₾800",
+          price: "₾249",
           tag: "Small business",
           cta: "Get started",
           perks: [
@@ -159,7 +157,7 @@ const T = {
         },
         {
           name: "Growth",
-          price: "₾1,500",
+          price: "₾499",
           tag: "Most popular",
           featured: true,
           cta: "Get started",
@@ -174,7 +172,7 @@ const T = {
         },
         {
           name: "Premium",
-          price: "₾3,000+",
+          price: "₾999",
           tag: "Enterprise",
           cta: "Contact us",
           perks: [
@@ -407,25 +405,12 @@ const T = {
 };
 
 export default function Home() {
-  const [darkMode, setDarkMode] = useState(true);
   const [lang, setLang] = useState("ka"); // Georgian by default
 
   useEffect(() => {
-    const savedDark = localStorage.getItem("darkMode");
-    const shouldDark = savedDark === null ? true : savedDark === "true";
-    setDarkMode(shouldDark);
-    document.documentElement.classList.toggle("dark", shouldDark);
-
     const savedLang = localStorage.getItem("lang");
     if (savedLang === "en" || savedLang === "ka") setLang(savedLang);
   }, []);
-
-  const toggleDark = () => {
-    const next = !darkMode;
-    setDarkMode(next);
-    localStorage.setItem("darkMode", next);
-    document.documentElement.classList.toggle("dark", next);
-  };
 
   const toggleLang = () => {
     const next = lang === "ka" ? "en" : "ka";
@@ -480,6 +465,14 @@ export default function Home() {
             "Which languages do you speak?",
             "How do I get started?",
           ],
+    inputPlaceholder:
+      lang === "ka"
+        ? "დაწერე შეტყობინება… (Enter — გაგზავნა)"
+        : "Type your message… (Enter to send)",
+    inputHint:
+      lang === "ka"
+        ? "Shift+Enter — ახალი ხაზი"
+        : "Shift+Enter for a new line",
   };
 
   const hideLanding = process.env.NEXT_PUBLIC_HIDE_LANDING === "true";
@@ -488,11 +481,7 @@ export default function Home() {
     return (
       <main className="h-screen flex items-center justify-center p-4 md:p-8">
         <div className="w-full max-w-3xl h-full max-h-[820px]">
-          <ChatWindow
-            darkMode={darkMode}
-            onToggleDark={toggleDark}
-            config={chatConfig}
-          />
+          <ChatWindow config={chatConfig} />
         </div>
       </main>
     );
@@ -555,13 +544,6 @@ export default function Home() {
               <Languages size={13} />
               <span className="tabular-nums">{t.lang}</span>
             </button>
-            <button
-              onClick={toggleDark}
-              aria-label={t.theme}
-              className="p-2 rounded-lg text-gray-300 hover:bg-white/5 transition"
-            >
-              {darkMode ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
             <a
               href="#demo"
               className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-medium shadow-glow hover:shadow-none hover:-translate-y-[1px] transition"
@@ -579,9 +561,9 @@ export default function Home() {
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 text-violet-300 text-xs font-medium ring-1 ring-violet-400/20 backdrop-blur-sm">
               <Sparkles size={12} /> {t.hero.badge}
             </span>
-            <h1 className="mt-5 text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
+            <h1 className="mt-5 text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.15]">
               {t.hero.h1}
-              <span className="block bg-gradient-to-r from-violet-400 via-fuchsia-400 to-indigo-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-violet-400 via-fuchsia-400 to-indigo-400 bg-clip-text text-transparent pb-2">
                 {t.hero.accent}
               </span>
             </h1>
@@ -633,11 +615,7 @@ export default function Home() {
             <div className="relative h-full">
               <div className="absolute -inset-4 bg-gradient-to-br from-violet-500/25 to-fuchsia-500/25 blur-2xl rounded-3xl" />
               <div className="relative h-full">
-                <ChatWindow
-                  darkMode={darkMode}
-                  onToggleDark={toggleDark}
-                  config={chatConfig}
-                />
+                <ChatWindow config={chatConfig} />
               </div>
             </div>
           </div>

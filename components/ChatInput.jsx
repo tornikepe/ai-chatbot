@@ -17,7 +17,7 @@ const COUNTER_THRESHOLD = 500;
  *   - Send button disabled when empty or over the limit
  *   - Stop button replaces Send while the AI is generating
  */
-export default function ChatInput({ onSend, isLoading, onStop }) {
+export default function ChatInput({ onSend, isLoading, onStop, placeholder, hint }) {
   const [input, setInput] = useState("");
   const textareaRef = useRef(null);
 
@@ -60,7 +60,7 @@ export default function ChatInput({ onSend, isLoading, onStop }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type your message… (Enter to send)"
+            placeholder={placeholder || "Type your message… (Enter to send)"}
             rows={1}
             maxLength={MAX_LENGTH + 50} // allow slight overage so they see the counter turn red
             className={`w-full resize-none rounded-xl border px-4 py-3 pr-4 text-sm bg-white/[0.04] text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 transition-all ${
@@ -110,7 +110,7 @@ export default function ChatInput({ onSend, isLoading, onStop }) {
 
       {/* Hint text */}
       <p className="text-[11px] text-gray-500 mt-1.5 ml-1">
-        Shift+Enter for a new line
+        {hint || "Shift+Enter for a new line"}
       </p>
     </div>
   );
