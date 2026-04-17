@@ -35,7 +35,7 @@ export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
 
   const messagesEndRef = useRef(null);
 
-  const title = config.title || "AI Assistant";
+  const title = config.title || "Tornikes AI BOT";
   const subtitle = config.subtitle || "";
 
   // Auto-scroll to bottom on new messages or while streaming
@@ -45,7 +45,6 @@ export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
 
   return (
     <div className="flex flex-col h-full bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-
       {/* ── Header ─────────────────────────────────────────────── */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-violet-700/30 bg-gradient-to-r from-violet-600 via-violet-600 to-purple-700">
         <div className="flex items-center gap-3">
