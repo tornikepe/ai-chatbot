@@ -57,10 +57,13 @@ export default function Home() {
   const brandName = process.env.NEXT_PUBLIC_BRAND_NAME || "Nexus AI";
   const heroHeadline =
     process.env.NEXT_PUBLIC_HERO_HEADLINE ||
-    "Turn your website into a 24/7 sales & support channel.";
+    "Your 24/7 AI assistant,";
+  const heroAccent =
+    process.env.NEXT_PUBLIC_HERO_ACCENT ||
+    "that never sleeps.";
   const heroSubheadline =
     process.env.NEXT_PUBLIC_HERO_SUBHEADLINE ||
-    "An AI assistant that answers your customers' questions instantly, captures leads while you sleep, and lets your team focus on what actually matters.";
+    "Answer customer questions instantly, capture leads while you sleep, and let your team focus on what actually matters. Deploy in one afternoon.";
 
   const chatConfig = {
     title: process.env.NEXT_PUBLIC_CHAT_TITLE || brandName,
@@ -123,7 +126,7 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-8 text-sm text-gray-600 dark:text-gray-400">
             <a href="#features" className="hover:text-violet-600 dark:hover:text-violet-400 transition">Features</a>
             <a href="#how" className="hover:text-violet-600 dark:hover:text-violet-400 transition">How it works</a>
-            <a href="#pricing" className="hover:text-violet-600 dark:hover:text-violet-400 transition">Pricing</a>
+            <a href="#usecases" className="hover:text-violet-600 dark:hover:text-violet-400 transition">Use cases</a>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -151,9 +154,9 @@ export default function Home() {
               <Sparkles size={12} /> Powered by GPT-class AI
             </span>
             <h1 className="mt-5 text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
-              {heroHeadline.split(".")[0]}
+              {heroHeadline}
               <span className="block bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent">
-                {heroHeadline.split(".")[1] || "Never miss a customer again."}
+                {heroAccent}
               </span>
             </h1>
             <p className="mt-5 text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-xl">
@@ -167,10 +170,10 @@ export default function Home() {
                 Try the live demo <ArrowRight size={16} />
               </a>
               <a
-                href="#pricing"
+                href="#usecases"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 font-medium hover:border-violet-400 dark:hover:border-violet-500 transition"
               >
-                See pricing
+                See use cases
               </a>
             </div>
 
@@ -193,7 +196,7 @@ export default function Home() {
           </div>
 
           {/* Live chat demo */}
-          <div id="demo" className="h-[620px] md:h-[680px] animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <div id="demo" className="h-[560px] sm:h-[620px] md:h-[680px] animate-fade-in" style={{ animationDelay: "0.1s" }}>
             <div className="relative h-full">
               <div className="absolute -inset-4 bg-gradient-to-br from-violet-400/30 to-fuchsia-400/30 blur-2xl rounded-3xl" />
               <div className="relative h-full">
@@ -309,78 +312,126 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Pricing ────────────────────────────────────────────────── */}
-      <section id="pricing" className="max-w-5xl mx-auto px-6 py-20">
-        <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Simple, honest pricing</h2>
-          <p className="mt-3 text-gray-600 dark:text-gray-400">One-time setup. Own your bot forever.</p>
+      {/* ── Use cases ──────────────────────────────────────────────── */}
+      <section id="usecases" className="max-w-7xl mx-auto px-6 py-20">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
+            Built for any customer-facing business
+          </h2>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
+            One platform — unlimited applications. Here are just a few.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            {
+              emoji: "🍽️",
+              title: "Restaurants & cafés",
+              body: "Takes reservations, answers menu questions, shares hours and directions. Never miss a booking because nobody picked up the phone.",
+            },
+            {
+              emoji: "🏨",
+              title: "Hotels & guesthouses",
+              body: "Multilingual concierge that answers booking inquiries, explains amenities, and upsells rooms. Works in 40+ languages.",
+            },
+            {
+              emoji: "🛍️",
+              title: "E-commerce stores",
+              body: "Recommends products, answers sizing/shipping questions, and recovers abandoned carts — 24/7 without hiring more staff.",
+            },
+            {
+              emoji: "💼",
+              title: "Professional services",
+              body: "Lawyers, accountants, clinics — screens inquiries, schedules consultations, and handles the first 80% of FAQs automatically.",
+            },
+            {
+              emoji: "🏫",
+              title: "Schools & courses",
+              body: "Answers admissions, tuition, and schedule questions. Frees up administrators to do real work instead of repeating themselves.",
+            },
+            {
+              emoji: "🏢",
+              title: "SaaS & agencies",
+              body: "Onboards new users, handles tier-1 support tickets, and qualifies demo requests before they hit your sales team.",
+            },
+          ].map((u) => (
+            <div
+              key={u.title}
+              className="group relative p-6 rounded-2xl bg-white/70 dark:bg-gray-900/60 backdrop-blur-sm border border-gray-200/60 dark:border-gray-800 hover:border-violet-300 dark:hover:border-violet-600 hover:-translate-y-0.5 transition"
+            >
+              <div className="text-3xl mb-3">{u.emoji}</div>
+              <h3 className="font-semibold tracking-tight">{u.title}</h3>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                {u.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Testimonials ───────────────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-6 py-20">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Loved by the businesses that use it</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {[
             {
-              name: "Starter",
-              price: "$299",
-              note: "one-time",
-              tag: "Small business",
-              perks: ["Branded chatbot", "Up to 1,000 chats/mo", "FAQ training", "Email support"],
+              quote: "We were missing at least 5 bookings a week to voicemail. Since the assistant went live we've recovered all of them — and it paid for itself in the first month.",
+              name: "Nino K.",
+              role: "Owner, Bella Italia",
             },
             {
-              name: "Growth",
-              price: "$599",
-              note: "one-time",
-              tag: "Most popular",
-              featured: true,
-              perks: ["Everything in Starter", "Lead capture to email", "Custom tone & voice", "Priority support"],
+              quote: "Our support team used to drown in the same 10 questions every day. Now the bot handles 70% of them. Our response time dropped from 4 hours to 30 seconds.",
+              name: "Giorgi M.",
+              role: "Head of Support, SaaS startup",
             },
             {
-              name: "Custom",
-              price: "Let's talk",
-              note: "",
-              tag: "Enterprise",
-              perks: ["Everything in Growth", "CRM integration", "Multilingual training", "SLA & white-label"],
+              quote: "Setup was done in one afternoon. The AI speaks fluent Georgian, English, and Russian — our international guests love it.",
+              name: "Salome T.",
+              role: "Manager, Old Town Hotel",
             },
-          ].map((p) => (
-            <div
-              key={p.name}
-              className={`relative p-6 rounded-2xl border transition ${
-                p.featured
-                  ? "bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white border-transparent shadow-glow scale-[1.02]"
-                  : "bg-white/70 dark:bg-gray-900/60 border-gray-200/60 dark:border-gray-800"
-              }`}
+          ].map((t) => (
+            <figure
+              key={t.name}
+              className="relative p-6 rounded-2xl bg-white/70 dark:bg-gray-900/60 border border-gray-200/60 dark:border-gray-800 flex flex-col"
             >
-              {p.featured && (
-                <div className="absolute top-4 right-4 text-[10px] font-medium uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">
-                  {p.tag}
-                </div>
-              )}
-              <div className={`text-xs uppercase tracking-wider ${p.featured ? "text-violet-100" : "text-gray-500 dark:text-gray-400"}`}>
-                {p.featured ? "Popular" : p.tag}
-              </div>
-              <h3 className={`mt-2 text-xl font-semibold ${p.featured ? "text-white" : ""}`}>{p.name}</h3>
-              <div className="mt-4 flex items-baseline gap-1">
-                <span className={`text-3xl font-semibold ${p.featured ? "text-white" : ""}`}>{p.price}</span>
-                {p.note && <span className={`text-sm ${p.featured ? "text-violet-100" : "text-gray-500"}`}>{p.note}</span>}
-              </div>
-              <ul className="mt-6 space-y-2.5">
-                {p.perks.map((perk) => (
-                  <li key={perk} className="flex items-start gap-2 text-sm">
-                    <Check size={15} className={p.featured ? "text-white" : "text-violet-600 dark:text-violet-400"} />
-                    <span className={p.featured ? "text-violet-50" : "text-gray-700 dark:text-gray-300"}>{perk}</span>
-                  </li>
+              <div className="flex gap-0.5 mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
                 ))}
-              </ul>
-              <a
-                href="#demo"
-                className={`mt-6 w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl font-medium text-sm transition ${
-                  p.featured
-                    ? "bg-white text-violet-700 hover:bg-violet-50"
-                    : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:opacity-90"
-                }`}
-              >
-                Get started <ArrowRight size={14} />
-              </a>
-            </div>
+              </div>
+              <blockquote className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1">
+                &ldquo;{t.quote}&rdquo;
+              </blockquote>
+              <figcaption className="mt-4 pt-4 border-t border-gray-200/60 dark:border-gray-800">
+                <div className="text-sm font-semibold">{t.name}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">{t.role}</div>
+              </figcaption>
+            </figure>
           ))}
+        </div>
+      </section>
+
+      {/* ── Final CTA ──────────────────────────────────────────────── */}
+      <section className="max-w-4xl mx-auto px-6 py-20">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 via-fuchsia-600 to-indigo-600 px-8 py-16 md:p-16 text-center shadow-glow">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.25),transparent)] pointer-events-none" />
+          <div className="relative">
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white">
+              Ready to stop missing customers?
+            </h2>
+            <p className="mt-4 text-violet-100 max-w-xl mx-auto">
+              Book a free 20-minute call. We'll show you exactly what this looks like for your business — no pressure, no jargon.
+            </p>
+            <a
+              href="#demo"
+              className="mt-8 inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-white text-violet-700 font-semibold hover:bg-violet-50 transition shadow-lg"
+            >
+              Book a free consultation <ArrowRight size={16} />
+            </a>
+          </div>
         </div>
       </section>
 
@@ -395,7 +446,7 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-6">
             <a href="#features" className="hover:text-violet-600 dark:hover:text-violet-400 transition">Features</a>
-            <a href="#pricing" className="hover:text-violet-600 dark:hover:text-violet-400 transition">Pricing</a>
+            <a href="#usecases" className="hover:text-violet-600 dark:hover:text-violet-400 transition">Use cases</a>
             <a href="#demo" className="hover:text-violet-600 dark:hover:text-violet-400 transition">Demo</a>
           </div>
         </div>

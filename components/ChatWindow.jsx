@@ -44,55 +44,43 @@ export default function ChatWindow({ darkMode, onToggleDark, config = {} }) {
   }, [messages, isThinking]);
 
   return (
-    <div className="flex flex-col h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl shadow-card border border-white/60 dark:border-gray-800/80 overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
       {/* ── Header ─────────────────────────────────────────────── */}
-      <div className="relative flex items-center justify-between px-5 py-4 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 overflow-hidden">
-        {/* Subtle shine overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 pointer-events-none" />
-
-        <div className="relative flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30 shadow-inner">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-violet-700/30 bg-gradient-to-r from-violet-600 via-violet-600 to-purple-700">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/30">
             <Bot size={20} className="text-white" />
           </div>
           <div>
-            <h1 className="text-white font-semibold text-base leading-tight tracking-tight">
+            <h1 className="text-white font-semibold text-base leading-tight">
               {title}
             </h1>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="relative flex h-2 w-2">
-                <span
-                  className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                    isLoading ? "bg-yellow-300 animate-ping" : "bg-green-400 animate-ping"
-                  }`}
-                />
-                <span
-                  className={`relative inline-flex rounded-full h-2 w-2 ${
-                    isLoading ? "bg-yellow-300" : "bg-green-400"
-                  }`}
-                />
-              </span>
-              <p className="text-violet-100/90 text-xs font-medium">
-                {isLoading ? "Typing…" : subtitle || "Online"}
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  isLoading ? "bg-yellow-300 animate-pulse" : "bg-green-400"
+                }`}
+              />
+              <p className="text-violet-200 text-xs">
+                {isLoading ? "Typing..." : subtitle || "Online"}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="relative flex items-center gap-1">
+        <div className="flex items-center gap-1">
           <button
             onClick={onToggleDark}
-            className="p-2 rounded-lg hover:bg-white/15 text-white/80 hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition-colors"
             title={darkMode ? "Light mode" : "Dark mode"}
-            aria-label="Toggle theme"
           >
             {darkMode ? <Sun size={17} /> : <Moon size={17} />}
           </button>
           {messages.length > 0 && (
             <button
               onClick={clearMessages}
-              className="p-2 rounded-lg hover:bg-white/15 text-white/80 hover:text-white transition-colors"
+              className="p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition-colors"
               title="Clear conversation"
-              aria-label="Clear conversation"
             >
               <Trash2 size={17} />
             </button>
