@@ -24,6 +24,16 @@ Core behavior:
 - If the user shows buying or booking intent, politely ask for their name and contact (phone or email).
 - Use Markdown sparingly: **bold** for emphasis, lists for options.`;
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": process.env.ALLOWED_ORIGIN || "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: CORS_HEADERS });
+}
+
 // ── POST /api/chat ───────────────────────────────────────────────────
 export async function POST(request) {
   try {
@@ -118,10 +128,7 @@ export async function POST(request) {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache, no-store",
         Connection: "keep-alive",
-        // Allow cross-origin requests from the widget embed.
-        // In production, lock this down to your client's domain.
-        "Access-Control-Allow-Origin":
-          process.env.ALLOWED_ORIGIN || "*",
+        ...CORS_HEADERS,
       },
     });
   } catch (error) {

@@ -9,8 +9,9 @@
 const securityHeaders = [
   // Prevent browsers from guessing the content type (MIME sniffing)
   { key: "X-Content-Type-Options", value: "nosniff" },
-  // Block the app from being embedded in iframes on other sites (clickjacking)
-  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  // Allow embedding in iframes from any origin — required for the embeddable widget.
+  // Use Content-Security-Policy frame-ancestors if you need to restrict specific domains.
+  { key: "X-Frame-Options", value: "ALLOWALL" },
   // Enable the browser's built-in XSS filter
   { key: "X-XSS-Protection", value: "1; mode=block" },
   // Control how much referrer info is sent to external sites
