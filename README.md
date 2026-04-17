@@ -1,143 +1,103 @@
-# AI Chatbot — Smart Customer Support
+# AI Chat Assistant — 24/7 Customer Support for Your Business
 
-A modern, AI-powered customer support chatbot that can be embedded on any website with a single line of code. Built with Next.js, OpenAI (or free Groq) API, and Tailwind CSS.
+A premium, production-grade AI chatbot designed for businesses that want to turn their website into a 24/7 sales and support channel. One codebase, unlimited clients — just change environment variables.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftornikepe%2Fai-chatbot&env=AI_PROVIDER,GROQ_API_KEY,SYSTEM_PROMPT&envDescription=Choose%20your%20AI%20provider%20and%20add%20the%20matching%20API%20key.%20Groq%20is%20free!&envLink=https%3A%2F%2Fconsole.groq.com%2Fkeys)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftornikepe%2Fai-chatbot&env=AI_PROVIDER,GROQ_API_KEY,SYSTEM_PROMPT&envDescription=Pick%20an%20AI%20provider%20and%20paste%20the%20matching%20API%20key.%20Groq%20is%20free.&envLink=https%3A%2F%2Fconsole.groq.com%2Fkeys)
 
-## Features
+---
 
-- **Streaming Responses** — AI replies appear in real-time, word by word
-- **Embeddable Widget** — Add to any website with one `<script>` tag
-- **Dark / Light Mode** — Automatic theme switching
-- **Markdown Support** — AI responses render bold, lists, code blocks
-- **Mobile Responsive** — Works on all screen sizes
-- **Customizable** — Change colors, position, and system prompt
-- **Fast** — Built on Next.js App Router with edge-ready API routes
+## ✨ What's inside
 
-## Quick Start
+- **Premium landing page** — Hero, feature grid, pricing, footer. Built to sell.
+- **Live streaming chat** — Tokens stream in real-time like ChatGPT.
+- **Multi-provider AI** — OpenAI, Groq (free, fast), or demo mode.
+- **Multi-client by design** — One deploy, many brands. All config via `NEXT_PUBLIC_*` env vars.
+- **Glassmorphism UI** — Inter font, ambient gradient blobs, subtle animations.
+- **Dark mode** — Respects system preference, persisted locally.
+- **Security first** — CSP headers, rate limiting, input validation, no secrets in the client.
+- **Production polish** — SEO metadata, Open Graph, reduced-motion support, keyboard a11y.
 
-### 1. Clone & Install
+---
+
+## 🚀 Quick start
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ai-chatbot.git
+git clone https://github.com/tornikepe/ai-chatbot.git
 cd ai-chatbot
 npm install
-```
-
-### 2. Set up environment
-
-```bash
-cp .env.example .env
-```
-
-Choose one of three AI providers and edit `.env` accordingly:
-
-**Option A — Groq (FREE, recommended):** Sign up at [console.groq.com/keys](https://console.groq.com/keys) (no credit card).
-
-```
-AI_PROVIDER=groq
-GROQ_API_KEY=gsk-your-key-here
-```
-
-**Option B — OpenAI (paid):** Requires billing at [platform.openai.com](https://platform.openai.com).
-
-```
-AI_PROVIDER=openai
-OPENAI_API_KEY=sk-your-key-here
-```
-
-**Option C — Demo mode (no API key):** Great for testing the UI.
-
-```
-AI_PROVIDER=demo
-```
-
-### 3. Run
-
-```bash
+cp .env.example .env         # then paste your Groq or OpenAI key
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the chatbot.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Embed on Any Website
+---
 
-Deploy your chatbot (e.g., on Vercel), then add this single line to any website:
+## 🔧 Configuration (per client, via env vars)
 
-```html
-<script src="https://your-chatbot-url.vercel.app/widget.js" data-url="https://your-chatbot-url.vercel.app"></script>
+Every piece of branding is driven by environment variables — no code changes needed between deployments.
+
+| Variable | Purpose |
+|---|---|
+| `AI_PROVIDER` | `openai`, `groq`, or `demo` |
+| `GROQ_API_KEY` / `OPENAI_API_KEY` | API key for the chosen provider |
+| `AI_MODEL` | Optional: override default model |
+| `SYSTEM_PROMPT` | The "personality" — tell the AI what the business does |
+| `NEXT_PUBLIC_BRAND_NAME` | Brand name shown in nav & footer |
+| `NEXT_PUBLIC_HERO_HEADLINE` | Hero headline (first sentence gets color-split) |
+| `NEXT_PUBLIC_HERO_SUBHEADLINE` | Hero paragraph under the headline |
+| `NEXT_PUBLIC_CHAT_TITLE` | Bot name in the chat header |
+| `NEXT_PUBLIC_CHAT_SUBTITLE` | Status line under the bot name |
+| `NEXT_PUBLIC_WELCOME_HEADING` | Empty-state heading |
+| `NEXT_PUBLIC_WELCOME_BODY` | Empty-state description |
+| `NEXT_PUBLIC_PROMPTS` | JSON array of suggested prompt buttons |
+| `NEXT_PUBLIC_HIDE_LANDING` | `true` → hide landing, show only the chat (for embedding) |
+
+### Example: restaurant client
+
+```env
+SYSTEM_PROMPT="You are the friendly host of Bella Italia, a family-run Italian restaurant in downtown Tbilisi. Answer questions about the menu, hours (12pm–11pm daily), reservations, and directions. Be warm and suggest dishes when relevant."
+NEXT_PUBLIC_BRAND_NAME="Bella Italia"
+NEXT_PUBLIC_HERO_HEADLINE="A table awaits. Questions answered instantly."
+NEXT_PUBLIC_CHAT_TITLE="Bella Italia Concierge"
+NEXT_PUBLIC_PROMPTS='["What are tonight''s specials?","Can I book a table for 4?","Do you offer vegan options?"]'
 ```
 
-### Widget Options
+---
 
-| Attribute | Default | Description |
-|-----------|---------|-------------|
-| `data-url` | Current origin | Your deployed chatbot URL |
-| `data-position` | `right` | Widget position: `right` or `left` |
-| `data-color` | `#7c3aed` | Bubble button color (any hex) |
+## 🛡️ Security
 
-## Tech Stack
+- All API keys stay on the server — never exposed to the browser.
+- Rate limiting per IP (in-memory; swap for Redis in production).
+- Strict CSP & security headers (see `next.config.js`).
+- Message length & count validation on every request.
+- `.env` is gitignored. **Never** commit real keys.
 
-- **Framework:** [Next.js 14](https://nextjs.org/) (App Router)
-- **AI:** [OpenAI API](https://openai.com/) (GPT-4o-mini)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Icons:** [Lucide React](https://lucide.dev/)
+---
 
-## Project Structure
+## 📦 Tech stack
 
-```
-ai-chatbot/
-├── app/
-│   ├── api/chat/route.js    # AI streaming API endpoint
-│   ├── layout.js            # Root layout with metadata
-│   ├── page.js              # Main chat page
-│   └── globals.css          # Global styles
-├── components/
-│   ├── ChatWindow.jsx       # Main chat container
-│   ├── ChatInput.jsx        # Message input with auto-resize
-│   └── MessageBubble.jsx    # Individual message display
-├── lib/
-│   └── useChat.js           # Custom hook for chat logic
-├── public/
-│   ├── widget.js            # Embeddable widget script
-│   └── demo.html            # Widget demo page
-└── .env.example             # Environment variables template
+- **Next.js 14** (App Router)
+- **React 18**
+- **Tailwind CSS 3**
+- **OpenAI SDK** (compatible with Groq)
+- **Lucide icons**
+- **React Markdown**
+
+---
+
+## 🌍 Deploy
+
+One-click deploy to Vercel via the button above, or:
+
+```bash
+vercel --prod
 ```
 
-## Customization
+Set your env vars in the Vercel dashboard. Done.
 
-### Change the AI behavior
+---
 
-Edit the `SYSTEM_PROMPT` in your `.env` file:
+## 📄 License
 
-```
-SYSTEM_PROMPT="You are a sales assistant for an e-commerce store. Help customers find products, answer questions about shipping, and process returns."
-```
-
-### Use a different AI model
-
-In `app/api/chat/route.js`, change the model:
-
-```js
-model: "gpt-4o"        // More capable, higher cost
-model: "gpt-4o-mini"   // Fast and affordable (default)
-model: "gpt-3.5-turbo" // Budget option
-```
-
-## Deploy
-
-### Vercel (Recommended)
-
-1. Click the **Deploy with Vercel** button at the top of this README, or
-2. Push to GitHub, import on [vercel.com/new](https://vercel.com/new)
-3. Add environment variables in Vercel dashboard:
-   - `AI_PROVIDER` = `groq` (or `openai`)
-   - `GROQ_API_KEY` (or `OPENAI_API_KEY`)
-   - `SYSTEM_PROMPT` — your business's custom personality
-4. Deploy — you'll get a live URL like `https://ai-chatbot-xyz.vercel.app`
-
-The included `vercel.json` bumps the streaming API route timeout to 30 seconds so long AI responses don't get cut off.
-
-## License
-
-MIT
+MIT — build businesses with it.

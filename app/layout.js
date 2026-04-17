@@ -1,43 +1,68 @@
 import "./globals.css";
+import { Inter } from "next/font/google";
 
 /**
- * Root layout — wraps every page in the app.
- *
- * Next.js App Router requires a root layout that defines <html> and <body>.
- * This is also where we set global metadata (title, description, OG tags).
- * Good SEO metadata is important when clients Google your work or share the link.
+ * Inter — modern, neutral UI typeface used by Vercel, Linear, Notion, etc.
+ * Variable weights are loaded locally by Next.js (no FOUC, no extra request).
  */
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
 export const metadata = {
-  title: "AI Assistant — Smart Customer Support",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://ai-chatbot.vercel.app"
+  ),
+  title: {
+    default: "AI Chat Assistant — 24/7 Customer Support for Your Business",
+    template: "%s — AI Chat Assistant",
+  },
   description:
-    "AI-powered customer support chatbot for businesses. Streaming responses, embeddable widget, works with OpenAI and Groq.",
-  keywords: ["AI chatbot", "customer support", "chatbot widget", "AI assistant"],
-  authors: [{ name: "AI Chatbot" }],
-  // Open Graph — controls how the link looks when shared on LinkedIn, Slack, etc.
+    "A production-grade AI assistant that answers customer questions 24/7, captures leads, and reduces support workload. Streaming responses, fully customizable, deploy in minutes.",
+  keywords: [
+    "AI chatbot",
+    "customer support automation",
+    "24/7 support",
+    "AI assistant for business",
+    "website chatbot",
+    "lead generation",
+  ],
+  authors: [{ name: "Tornike Peitrishvili" }],
+  creator: "Tornike Peitrishvili",
   openGraph: {
-    title: "AI Assistant — Smart Customer Support",
-    description: "Embed an AI-powered support chatbot on any website in seconds.",
     type: "website",
+    title: "AI Chat Assistant — 24/7 Customer Support",
+    description:
+      "Turn your website into a 24/7 sales & support channel. Powered by GPT-class models, styled for your brand, deployed in minutes.",
+    siteName: "AI Chat Assistant",
   },
-  // Twitter/X card
   twitter: {
-    card: "summary",
-    title: "AI Assistant — Smart Customer Support",
+    card: "summary_large_image",
+    title: "AI Chat Assistant — 24/7 Customer Support",
+    description:
+      "Production-ready AI assistant for your business. Streaming, customizable, secure.",
   },
-  // Prevent search engines from indexing the demo (remove this in production)
-  // robots: { index: false },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#7c3aed",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#faf5ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b12" },
+  ],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="bg-gray-50 dark:bg-gray-950 antialiased">
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <body className="font-sans antialiased bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 dark:from-[#0b0b12] dark:via-[#0c0a18] dark:to-[#120a20] text-gray-900 dark:text-gray-100 min-h-screen">
         {children}
       </body>
     </html>

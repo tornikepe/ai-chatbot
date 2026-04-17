@@ -52,7 +52,7 @@ export default function ChatInput({ onSend, isLoading, onStop }) {
   };
 
   return (
-    <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3">
+    <div className="border-t border-gray-200/70 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm px-4 py-3">
       <form onSubmit={handleSubmit} className="flex items-end gap-2">
         <div className="flex-1 relative">
           <textarea
@@ -100,7 +100,7 @@ export default function ChatInput({ onSend, isLoading, onStop }) {
           <button
             type="submit"
             disabled={!input.trim() || isOverLimit}
-            className="flex-shrink-0 p-3 rounded-xl bg-violet-600 hover:bg-violet-700 disabled:bg-gray-200 dark:disabled:bg-gray-700 text-white disabled:text-gray-400 transition-colors shadow-sm disabled:shadow-none"
+            className="flex-shrink-0 p-3 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 hover:shadow-glow disabled:bg-none disabled:bg-gray-200 dark:disabled:bg-gray-700 text-white disabled:text-gray-400 transition-all shadow-sm disabled:shadow-none hover:-translate-y-[1px] disabled:translate-y-0"
             title="Send message"
           >
             <Send size={17} />
