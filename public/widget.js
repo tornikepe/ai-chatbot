@@ -130,6 +130,7 @@
   // The chatbot iframe can post a message: { type: "ai-chatbot-unread" }
   // to trigger the red notification dot on the bubble.
   window.addEventListener("message", function (e) {
+    if (e.origin !== chatbotUrl.replace(/\/$/, "").split("/").slice(0, 3).join("/")) return;
     if (e.data && e.data.type === "ai-chatbot-unread" && !isOpen) {
       badge.style.display = "block";
     }
