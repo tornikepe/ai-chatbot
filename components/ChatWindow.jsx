@@ -97,7 +97,6 @@ export default function ChatWindow({ config = {} }) {
         isLoading={isLoading}
         onStop={stopGenerating}
         placeholder={config.inputPlaceholder}
-        hint={config.inputHint}
       />
     </div>
   );

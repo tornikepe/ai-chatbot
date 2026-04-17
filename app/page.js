@@ -465,14 +465,7 @@ export default function Home() {
             "Which languages do you speak?",
             "How do I get started?",
           ],
-    inputPlaceholder:
-      lang === "ka"
-        ? "დაწერე შეტყობინება… (Enter — გაგზავნა)"
-        : "Type your message… (Enter to send)",
-    inputHint:
-      lang === "ka"
-        ? "Shift+Enter — ახალი ხაზი"
-        : "Shift+Enter for a new line",
+    inputPlaceholder: lang === "ka" ? "დაწერე შეტყობინება…" : "Message…",
   };
 
   const hideLanding = process.env.NEXT_PUBLIC_HIDE_LANDING === "true";
