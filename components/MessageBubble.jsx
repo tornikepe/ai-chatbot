@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Copy, Check, AlertTriangle } from "lucide-react";
+import { Copy, Check, AlertTriangle, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 /**
@@ -45,8 +45,8 @@ export default function MessageBubble({ message }) {
     >
       {/* AI avatar */}
       {!isUser && (
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold mr-3 flex-shrink-0 mt-1">
-          AI
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center text-white mr-3 flex-shrink-0 mt-1 shadow-glow">
+          <Sparkles size={14} />
         </div>
       )}
 
