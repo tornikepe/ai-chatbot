@@ -1,5 +1,5 @@
 "use client";
-import { Bot } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 /**
  * TypingIndicator — animated dots shown while the AI is "thinking".
@@ -13,8 +13,8 @@ export default function TypingIndicator() {
   return (
     <div className="flex justify-start mb-4 message-enter">
       {/* AI avatar — matches MessageBubble layout */}
-      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-white mr-3 flex-shrink-0 mt-1">
-        <Bot size={14} />
+      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center text-white mr-3 flex-shrink-0 mt-1 shadow-glow">
+        <Sparkles size={14} />
       </div>
 
       {/* Bubble with three bouncing dots */}
