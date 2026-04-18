@@ -16,11 +16,11 @@ export const metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "https://ai-chatbot.vercel.app"
   ),
   title: {
-    default: "Georgian Bot — AI ასისტენტი ქართული ბიზნესისთვის",
-    template: "%s — Georgian Bot",
+    default: "Lumo — AI, რომელიც თქვენი კლიენტის ენაზე საუბრობს",
+    template: "%s — Lumo",
   },
   description:
-    "AI ასისტენტი, რომელიც სრულყოფილად საუბრობს ქართულად და ინგლისურად. 24/7 პასუხობს თქვენს კლიენტებს, იღებს ჯავშნებს, იჭერს lead-ებს.",
+    "Lumo — AI ასისტენტი ქართული ბიზნესისთვის. 24/7 პასუხობს კლიენტებს ქართულად, ინგლისურად და რუსულად. იღებს ჯავშნებს და იჭერს lead-ებს.",
   keywords: [
     "AI chatbot",
     "customer support automation",
@@ -33,16 +33,16 @@ export const metadata = {
   creator: "Tornike Peitrishvili",
   openGraph: {
     type: "website",
-    title: "AI Chat Assistant — 24/7 Customer Support",
+    title: "Lumo — AI that speaks your customer's language",
     description:
-      "Turn your website into a 24/7 sales & support channel. Powered by GPT-class models, styled for your brand, deployed in minutes.",
-    siteName: "AI Chat Assistant",
+      "AI assistant for Georgian businesses. Answers customers 24/7 in Georgian, English, and Russian. Captures leads while you sleep.",
+    siteName: "Lumo",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Chat Assistant — 24/7 Customer Support",
+    title: "Lumo — AI that speaks your customer's language",
     description:
-      "Production-ready AI assistant for your business. Streaming, customizable, secure.",
+      "Production-ready AI assistant for Georgian businesses. Streaming, multilingual, secure.",
   },
   robots: {
     index: true,
